@@ -11,7 +11,7 @@ import requests
 
 GET:
 1. /cars                    - Get the list of cars
-   Example: response = requests.get(url='http://127.0.0.1:5000/cars',auth=(username,password))
+   Example: response = requests.get(url='http://127.0.0.1:5000/cars',auth=(*username,*password))
 
 2. /users                   - Get the list of users
    Example: response = requests.get(url='http://127.0.0.1:5000/users',auth=(username,password))
@@ -42,3 +42,5 @@ DELETE:
 
 2. /register/car/delete/     - Delete first entry in car registration list
    Example: response = requests.delete(url='http://127.0.0.1:5000/register/car/delete',auth=(username,password))
+
+* Get the username & password from user_list in the cars_app.py file
