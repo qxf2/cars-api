@@ -4,8 +4,7 @@ from functools import wraps
 import logging
 import random
 import flask
-from flask import Flask, request, jsonify, abort
-
+from flask import Flask, request, jsonify, abort, render_template
 
 
 app = Flask(__name__)
@@ -79,6 +78,12 @@ def requires_perm():
             perm_flag = True
             return perm_flag
     return perm_flag
+
+
+@app.route("/", methods=["GET"])
+def index_page():
+    """this will help test GET without url params"""
+    return render_template('index.html')
 
 
 @app.route("/cars", methods=["GET"])
@@ -230,4 +235,4 @@ def get_user_list():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000)
+    app.run(host="127.0.0.1", port=5000, debug=True)
