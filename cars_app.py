@@ -1,4 +1,13 @@
-"cars api"
+"""
+cars api is a sample web application developed by Qxf2 Services to help testers learn API automation.
+This REST application written in Python was built solely to help QA learn to write API automation. 
+The application has endpoints for you to practice automating GET, POST, PUT and DELETE methods. 
+It includes endpoints that use URL parameters, jSON payloads, returns different response codes, etc.
+We have also included permissioning and authentication too to help you write role based API tests. 
+
+IMPORTANT DISCLAIMER: The code here does not reflect Qxf2's coding standards and practices. 
+"""
+
 import os
 from functools import wraps
 import logging
@@ -211,7 +220,6 @@ def get_registered_cars():
 def delete_registered_cars():
     """this will help test delete"""
     del registered_cars[0]
-    # registered_cars_list.remove[registered_cars_list[0]]
 
     return jsonify({'successful': True}), 200
 
