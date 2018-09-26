@@ -36,12 +36,12 @@ POST:
    Example: response = requests.post(url='http://127.0.0.1:5000/register/car',params={'car_name':'figo','brand':'Ford'},json={'customer_name': 'Unai Emery','city': 'London'},auth=(username,password))
 
 PUT:
-1. /cars/update/<name>      - Update car properties 
-   Example: response = requests.put(url='http://127.0.0.1:5000/cars/update/<name>',json={'name':<name>,'brand':'Ford','price_range':'2-3lacs','car_type':'sedan'},auth=(username,password))
+1. /cars/update/< name >      - Update car properties 
+   Example: response = requests.put(url='http://127.0.0.1:5000/cars/update/Vento',json={'name':Vento,'brand':'Ford','price_range':'2-3lacs','car_type':'sedan'},auth=(username,password))
 
 DELETE:
-1. /cars/remove/<name>      - Delete cars from cars_list 
-   Example: response = requests.delete(url='http://127.0.0.1:5000/register/cars/remove/<name>',auth=(username,password))
+1. /cars/remove/< name >      - Delete cars from cars_list 
+   Example: response = requests.delete(url='http://127.0.0.1:5000/register/cars/remove/City',auth=(username,password))
 
 2. /register/car/delete/     - Delete first entry in car registration list
    Example: response = requests.delete(url='http://127.0.0.1:5000/register/car/delete',auth=(username,password))
