@@ -20,13 +20,13 @@ GET:
    Example: response = requests.get(url='http://127.0.0.1:5000/users',auth=(username,password))
 
 3. /cars/filter/<car_type>  - Filter through the list of cars
-   Example: response = requests.get(url='http://127.0.0.1:5000/cars/filter/<car_type>',auth=(username,password))
+   Example: response = requests.get(url='http://127.0.0.1:5000/cars/filter/hatchback',auth=(username,password))
 
 4. /register                - Get registered cars
    Example: response = requests.get(url='http://127.0.0.1:5000/register',auth=(username,password))
 
-5. /cars/<name>             - Get cars by name
-   Example: response = requests.get(url='http://127.0.0.1:5000/cars/<name>',auth=(username,password))
+5. /cars/< name >             - Get cars by name
+   Example: response = requests.get(url='http://127.0.0.1:5000/cars/Swift',auth=(username,password))
 
 POST:
 1. /cars/add                - Add new cars 
