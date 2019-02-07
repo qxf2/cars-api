@@ -43,7 +43,7 @@ DELETE:
 1. /cars/remove/< name >      - Delete cars from cars_list 
    Example: response = requests.delete(url='http://127.0.0.1:5000/register/cars/remove/City',auth=(username,password))
 
-2. /register/car/delete/     - Delete first entry in car registration list
+2. /car/delete/     - Delete first entry in car registration list
    Example: response = requests.delete(url='http://127.0.0.1:5000/register/car/delete',auth=(username,password))
 
 * Get the username & password from user_list in the cars_app.py file
