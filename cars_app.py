@@ -1,11 +1,11 @@
 """
 cars api is a sample web application developed by Qxf2 Services to help testers learn API automation.
-This REST application written in Python was built solely to help QA learn to write API automation. 
-The application has endpoints for you to practice automating GET, POST, PUT and DELETE methods. 
+This REST application written in Python was built solely to help QA learn to write API automation.
+The application has endpoints for you to practice automating GET, POST, PUT and DELETE methods.
 It includes endpoints that use URL parameters, jSON payloads, returns different response codes, etc.
-We have also included permissioning and authentication too to help you write role based API tests. 
+We have also included permissioning and authentication too to help you write role based API tests.
 
-IMPORTANT DISCLAIMER: The code here does not reflect Qxf2's coding standards and practices. 
+IMPORTANT DISCLAIMER: The code here does not reflect Qxf2's coding standards and practices.
 """
 
 import os
@@ -13,10 +13,11 @@ from functools import wraps
 import logging
 import random
 import flask
-from flask import Flask, request, jsonify, abort, render_template
+from flask import Flask, session, request, jsonify, abort, render_template
 
 
 app = Flask(__name__)
+app.secret_key = 'Bxf6?Qxf2!Kxf2'
 """write logs for app
    filehandler of logging  module is not creating log directory if dir does not exist"""
 if not os.path.exists('log'):
@@ -54,7 +55,6 @@ def authenticate_error(auth_flag):
     else:
         message = {'message': "Require Basic Authentication"}
     resp = jsonify(message)
-
     resp.status_code = 401
     resp.headers['WWW-Authenticate'] = 'Basic realm="Example"'
 
@@ -73,6 +73,7 @@ def requires_auth(f):
             return authenticate_error(auth_flag)
         elif not check_auth(auth.username, auth.password):
             return authenticate_error(auth_flag)
+        session['cars_list'] = session.get('cars_list', cars_list)
         return f(*args, **kwargs)
 
     return decorated
@@ -99,14 +100,14 @@ def index_page():
 @requires_auth
 def get_cars():
     """this will help test GET without url params"""
-    return flask.jsonify({"cars_list": cars_list, 'successful': True})
+    return flask.jsonify({"cars_list": session.get('cars_list'), 'successful': True})
 
 
 @app.route("/cars/<name>", methods=["GET"])
 @requires_auth
 def get_car_details(name):
     """this will help test GET with url params"""
-    car = [car for car in cars_list if car['name'] == name]
+    car = [car for car in session.get('cars_list') if car['name'] == name]
     if len(car) == 0:
         resp = jsonify({'message': 'No car found', 'successful': False}), 200
     else:
@@ -121,7 +122,7 @@ def get_car():
     car_name = request.args.get('car_name')
     brand = request.args.get('brand')
     if car_name != "" and car_name is not None and brand != "" and brand is not None:
-        car = [car for car in cars_list if car['name'] == car_name]
+        car = [car for car in session.get('cars_list') if car['name'] == car_name]
         if len(car) == 0:
             resp = jsonify({'message': 'No car found',
                             'successful': False}), 200
@@ -146,7 +147,7 @@ def add_car():
         'price_range': request.json['price_range'],
         'car_type': request.json['car_type']
     }
-    cars_list.append(car)
+    session.get('cars_list').append(car)
     resp = jsonify({'car': car, 'successful': True}), 200
 
     return resp
@@ -157,7 +158,7 @@ def add_car():
 def update_car(name):
     """this will help test PUT """
     resp = {}
-    car = [car for car in cars_list if car['name'] == name]
+    car = [car for car in session.get('cars_list') if car['name'] == name]
     if len(car) != 0:
         if not request.json or not 'name' in request.json:
             resp['message'], resp['successful'] = 'Not a json'
@@ -181,10 +182,10 @@ def update_car(name):
 @requires_auth
 def remove_car(name):
     """this will help test DELETE"""
-    car = [car for car in cars_list if car['name'] == name]
+    car = [car for car in session['cars_list'] if car['name'] == name]
     if len(car) == 0:
         abort(404)
-    cars_list.remove(car[0])
+    session['cars_list'].remove(car[0])
 
     return jsonify({'car': car[0], 'successful': True}), 200
 
@@ -196,7 +197,7 @@ def register_car():
     car_name = request.args.get('car_name')
     brand = request.args.get('brand')
     if car_name != "" and car_name is not None and brand != "" and brand is not None:
-        car = [car for car in cars_list if car['name'] == car_name]
+        car = [car for car in session.get('cars_list') if car['name'] == car_name]
     customer_details = {
         'customer_name': request.json['customer_name'],
         'city': request.json['city']
@@ -228,7 +229,7 @@ def delete_registered_cars():
 @requires_auth
 def filter_cars(car_type):
     "get cars of the given car type"
-    filtered_list = [car for car in cars_list if car['car_type'] == car_type]
+    filtered_list = [car for car in session.get('cars_list') if car['car_type'] == car_type]
 
     return jsonify({'cars': filtered_list})
 
