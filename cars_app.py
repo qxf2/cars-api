@@ -1,5 +1,5 @@
 """
-cars api is a sample web application developed by Qxf2 Services to help testers learn API automation.
+Cars API is a sample web application developed by Qxf2 Services to help testers learn API automation.
 This REST application written in Python was built solely to help QA learn to write API automation.
 The application has endpoints for you to practice automating GET, POST, PUT and DELETE methods.
 It includes endpoints that use URL parameters, jSON payloads, returns different response codes, etc.
@@ -8,30 +8,30 @@ We have also included permissioning and authentication too to help you write rol
 IMPORTANT DISCLAIMER: The code here does not reflect Qxf2's coding standards and practices.
 """
 
-import os
-from functools import wraps
 import logging
+import os
 import random
+from functools import wraps
 import flask
 from flask import Flask, session, request, jsonify, abort, render_template
 
 
 app = Flask(__name__)
 app.secret_key = 'Bxf6?Qxf2!Kxf2'
+
 """write logs for app
    filehandler of logging  module is not creating log directory if dir does not exist"""
 if not os.path.exists('log'):
     os.makedirs('log')
-file_handler = logging.FileHandler('log/app.log')
-app.logger.addHandler(file_handler)
+app.logger.addHandler(logging.FileHandler('log/app.log'))
 app.logger.setLevel(logging.INFO)
 
-cars_list = [{"name": "Swift", "brand": "Maruti", "price_range": "3-5 lacs", "car_type": "hatchback"},
+CARS_LIST = [{"name": "Swift", "brand": "Maruti", "price_range": "3-5 lacs", "car_type": "hatchback"},
              {"name": "Creta", "brand": "Hyundai", "price_range": "8-14 lacs", "car_type": "hatchback"},
              {"name": "City", "brand": "Honda", "price_range": "3-6 lacs", "car_type": "sedan"},
              {"name": "Vento", "brand": "Volkswagen", "price_range": "7-10 lacs", "car_type": "sedan"}]
 
-user_list = [{"name": "qxf2", "password": "qxf2", "perm": "admin"},
+USER_LIST = [{"name": "qxf2", "password": "qxf2", "perm": "admin"},
              {"name": "eric", "password": "testqxf2", "perm": "non_admin"},
              {"name": "morgan", "password": "testqxf2", "perm": "non_admin"},
              {"name": "jack", "password": "qxf2", "perm": "non_admin"}]
@@ -41,7 +41,7 @@ registered_cars = []
 
 def check_auth(username, password):
     "check if the given is valid"
-    user = [user for user in user_list if user['name']
+    user = [user for user in USER_LIST if user['name']
             == username and user['password'] == password]
     if len(user) == 1:
         return True
@@ -61,10 +61,11 @@ def authenticate_error(auth_flag):
     return resp
 
 
-def requires_auth(f):
+def requires_auth(app_func):
     "verify given user authentication details"
-    @wraps(f)
+    @wraps(app_func)
     def decorated(*args, **kwargs):
+        "Execute app_func only if authentication is valid"
         auth = request.authorization
         auth_flag = True
 
@@ -73,8 +74,8 @@ def requires_auth(f):
             return authenticate_error(auth_flag)
         elif not check_auth(auth.username, auth.password):
             return authenticate_error(auth_flag)
-        session['cars_list'] = session.get('cars_list', cars_list)
-        return f(*args, **kwargs)
+        session['cars_list'] = session.get('cars_list', CARS_LIST.copy())
+        return app_func(*args, **kwargs)
 
     return decorated
 
@@ -83,7 +84,7 @@ def requires_perm():
     "check if the autheticated user has a admin permission"
     auth = request.authorization
     perm_flag = False
-    for user in user_list:
+    for user in USER_LIST:
         if user['name'] == auth.username and user['perm'] == 'admin':
             perm_flag = True
             return perm_flag
@@ -202,7 +203,7 @@ def register_car():
         'customer_name': request.json['customer_name'],
         'city': request.json['city']
     }
-    registered_car = {'car': car[0], 'customer_details': request.json,
+    registered_car = {'car': car[0], 'customer_details': customer_details,
                       'registration_token': random.randrange(0, 4), 'successful': True}
     registered_cars.append(registered_car)
 
@@ -239,7 +240,7 @@ def filter_cars(car_type):
 def get_user_list():
     "return user list if the given authenticated user has admin permission"
     if requires_perm() is True:
-        return jsonify({'user_list': user_list, 'successful': True}), 200
+        return jsonify({'user_list': USER_LIST, 'successful': True}), 200
     return jsonify({'message': 'You are not permitted to access this resource', 'successful': False}), 403
 
 
