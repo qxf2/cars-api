@@ -136,7 +136,7 @@ print(f'Cars present after adding a new car: {cars_after_add}')
 #Create a session
 my_session = requests.Session()
 
-#----Now use my_session.blah() wherever you were using requests.blah()
+#⭐ KEY CHANGE: Now use my_session.blah() wherever you were using requests.blah()
 
 #Cars present before you add a new car
 response = my_session.get(url='http://127.0.0.1:5000/cars',auth=(username,password))
@@ -166,7 +166,7 @@ response = requests.post(url='http://127.0.0.1:5000/register/car',params={'car_n
                 <br>
                 <h4 class="thin-text">3. PUT</h4>
                 <br>
-                a) <strong class="thin-text endpoint"> /cars/update/<%name%></strong>: Add new cars
+                a) <strong class="thin-text endpoint"> /cars/update/<%name%></strong>: Update a car
                 <pre>
                     <code class="python">
 
@@ -176,7 +176,7 @@ esponse = requests.post(url='http://127.0.0.1:5000/cars/add',json={'name':'figo'
                 <br>
                 <h4 class="thin-text">4. DELETE</h4>
                 <br>
-                a) <strong class="thin-text endpoint">/cars/remove/<%name%></strong>: Add new cars
+                a) <strong class="thin-text endpoint">/cars/remove/<%name%></strong>: Delete a car
                 <pre>
                     <code class="python">
 
