@@ -17,7 +17,7 @@ from flask import Flask, session, request, jsonify, abort, render_template
 
 
 app = Flask(__name__)
-app.secret_key = 'Bxf6?Qxf2!Kxf2'
+app.secret_key = os.urandom(24)
 
 """write logs for app
    filehandler of logging  module is not creating log directory if dir does not exist"""
