@@ -1,11 +1,11 @@
 """
 cars api is a sample web application developed by Qxf2 Services to help testers learn API automation.
-This REST application written in Python was built solely to help QA learn to write API automation. 
-The application has endpoints for you to practice automating GET, POST, PUT and DELETE methods. 
+This REST application written in Python was built solely to help QA learn to write API automation.
+The application has endpoints for you to practice automating GET, POST, PUT and DELETE methods.
 It includes endpoints that use URL parameters, jSON payloads, returns different response codes, etc.
-We have also included permissioning and authentication too to help you write role based API tests. 
+We have also included permissioning and authentication too to help you write role based API tests.
 
-IMPORTANT DISCLAIMER: The code here does not reflect Qxf2's coding standards and practices. 
+IMPORTANT DISCLAIMER: The code here does not reflect Qxf2's coding standards and practices.
 """
 
 import os
@@ -14,6 +14,7 @@ import logging
 import random
 import flask
 from flask import Flask, request, jsonify, abort, render_template
+from utils.spoiler import Spoiler
 
 
 app = Flask(__name__)
@@ -97,6 +98,7 @@ def index_page():
 
 @app.route("/cars", methods=["GET"])
 @requires_auth
+@Spoiler.vary_me
 def get_cars():
     """this will help test GET without url params"""
     return flask.jsonify({"cars_list": cars_list, 'successful': True})
