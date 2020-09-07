@@ -31,6 +31,9 @@
         .cmdline {
             color: #c7254e;;
         }
+        .question {
+            color: #F00000;;
+        }
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/agate.min.css" rel="stylesheet">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
@@ -47,7 +50,7 @@
                 <br>
                 <br>
                 <h2 class="thin-text">Setup</h2>
-                <p class="text-justify">Since we don't want other people's tests interfering with your tests, we recommend you get setup with this application locally. It's easy and takes less than 15-minutes for absolute beginners. So, don't worry!
+                <p class="text-justify">We recommend you get setup with this application locally as it is a good opportunity for you to get some practice setting up a simple Flask application. It's easy and takes less than 15-minutes for absolute beginners to get setup. So, don't worry!
                 <ol type="1">
                     <li>In your terminal prompt, <span class="cmdline">pip install flask</span></li>
                     <li>If you know git, <span class="cmdline">git clone https://github.com/qxf2/cars-api.git</span></li>
@@ -62,87 +65,128 @@
                 <br>
 
                 <h2 class="thin-text">API endpoints and examples</h2>
-                <p class="text-justify">This section lists the API endpoints present. It also lists the call you would make with Python's requests library.</p>
+                <p class="text-justify">This section lists the API endpoints present. It also lists the call you would make with Python's requests library. To follow along, please run <span class="cmdline">python cars_app.py</span> in one terminal prompt. Then, in a new terminal prompt, pull up your Python interpreter (by typing <span class="cmdline">python</span>) and <span class="cmdline">import requests</span>. Then, follow along by running the commands below in your Python interpreter.</p>
 
                 <h4 class="thin-text">1. GET</h4>
                 <br>
                 a) <strong class="thin-text endpoint"> /cars</strong>: Get a list of cars
                 <pre>
                     <code class="python">
-import requests
 response = requests.get(url='http://127.0.0.1:5000/cars',auth=(username,password))
                     </code>
                 </pre>
                 b) <strong class="thin-text endpoint"> /users</strong>: Get the list of users
                 <pre>
                     <code class="python">
-import requests
 response = requests.get(url='http://127.0.0.1:5000/users',auth=(username,password))
                     </code>
                 </pre>
-                c) <strong class="thin-text endpoint"> 
+                c) <strong class="thin-text endpoint">
                         /cars/filter/<%car_type%> </strong>: Get the list of users
                 <pre>
                     <code class="python">
-import requests
 response = requests.get(url='http://127.0.0.1:5000/cars/filter/hatchback',auth=(username,password))
                     </code>
                 </pre>
                 d) <strong class="thin-text endpoint"> /register </strong>: Get registered cars
                 <pre>
                     <code class="python">
-import requests
 response = requests.get(url='http://127.0.0.1:5000/register',auth=(username,password))
                     </code>
                 </pre>
                 e) <strong class="thin-text endpoint"> /cars/<%name%> </strong>: Get cars by name
                 <pre>
                     <code class="python">
-import requests
 response = requests.get(url='http://127.0.0.1:5000/cars/Swift',auth=(username,password))
                     </code>
-                </pre>                
+                </pre>
                 <br>
                 <h4 class="thin-text">2. POST</h4>
                 <br>
                 a) <strong class="thin-text endpoint"> /cars/add</strong>: Add new cars
                 <pre>
                     <code class="python">
-import requests
 response = requests.post(url='http://127.0.0.1:5000/cars/add',json={'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'},auth=(username,password))
                     </code>
                 </pre>
+                🤔&nbsp;&nbsp;How do you verify that your post did change data on the server? One effective way is to keep track of the cars that were present before you added a new car. And then look at the cars that are present after you added a new car. So try:
+                <pre>
+                    <code class="python">
+#Cars present before you add a new car
+response = requests.get(url='http://127.0.0.1:5000/cars',auth=(username,password))
+cars_before_add = response.json()
+print(f'Cars present before adding a new car: {cars_before_add}')
+
+#Make the POST to add a new car
+response = requests.post(url='http://127.0.0.1:5000/cars/add',json={'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'},auth=(username,password))
+
+#Cars present after you added a new car
+response = requests.get(url='http://127.0.0.1:5000/cars',auth=(username,password))
+cars_after_add = response.json()
+print(f'Cars present after adding a new car: {cars_after_add}')
+                    </code>
+                </pre>
+                😲&nbsp;&nbsp; ... the cars present before you added a new car and the cars present after you added a new car seem identical! What happened?
+                <br>
+                <br>
+                💡&nbsp; Maybe the Cars App is using sessions? So each request is treated as a new session and the POST does not affect the next GET. Luckily for us, Python's <span class="cmdline">requests</span> module makes it easy to create a session. You simply have to try:
+
+<pre>
+    <code class="python">
+#Create a session
+my_session = requests.Session()
+
+#⭐ KEY CHANGE: Now use my_session.blah() wherever you were using requests.blah()
+
+#Cars present before you add a new car
+response = my_session.get(url='http://127.0.0.1:5000/cars',auth=(username,password))
+cars_before_add = response.json()
+print(f'Cars present before adding a new car: {cars_before_add}')
+
+#Make the POST to add a new car
+response = my_session.post(url='http://127.0.0.1:5000/cars/add',json={'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'},auth=(username,password))
+
+#Cars present after you added a new car
+response = my_session.get(url='http://127.0.0.1:5000/cars',auth=(username,password))
+cars_after_add = response.json()
+print(f'Cars present after adding a new car: {cars_after_add}')
+    </code>
+</pre>
+😎&nbsp;&nbsp; Now, you see that the car you have added did indeed get added! From now on, it is recommended you start using a session to interact with the app. This is especially true if you are going to be performing actions that change data (a.k.a non-idempotent actions) of the application.
+<br>
+<br>
                 b) <strong class="thin-text endpoint"> /register/car</strong>: Register a car
                 <pre>
                     <code class="python">
-import requests
 response = requests.post(url='http://127.0.0.1:5000/register/car',params={'car_name':'figo','brand':'Ford'},json={'customer_name': 'Unai Emery','city': 'London'},auth=(username,password))
                     </code>
                 </pre>
+                <span class="question">Question: How do you verify that the registration happened correctly?</span>
+                <br>
                 <br>
                 <h4 class="thin-text">3. PUT</h4>
                 <br>
-                a) <strong class="thin-text endpoint"> /cars/update/<%name%></strong>: Add new cars
+                a) <strong class="thin-text endpoint"> /cars/update/<%name%></strong>: Update a car
                 <pre>
                     <code class="python">
-import requests
+
 esponse = requests.post(url='http://127.0.0.1:5000/cars/add',json={'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'},auth=(username,password))
                     </code>
                 </pre>
                 <br>
                 <h4 class="thin-text">4. DELETE</h4>
                 <br>
-                a) <strong class="thin-text endpoint">/cars/remove/<%name%></strong>: Add new cars
+                a) <strong class="thin-text endpoint">/cars/remove/<%name%></strong>: Delete a car
                 <pre>
                     <code class="python">
-import requests
+
 response = requests.delete(url='http://127.0.0.1:5000/register/cars/remove/City',auth=(username,password))
                     </code>
                 </pre>
                 b) <strong class="thin-text endpoint"> /register/car/delete</strong>: Delete first entry in car registration list
                 <pre>
                     <code class="python">
-import requests
+
 response = requests.delete(url='http://127.0.0.1:5000/register/car/delete',auth=(username,password))
                     </code>
                 </pre>
