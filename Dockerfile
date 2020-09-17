@@ -3,16 +3,16 @@
 FROM python
 LABEL maintainer = "Qxf2 Services"
 
-# Clone files for Docker Image creation
+#Clone cars-api repository for Docker Image creation
 RUN git clone https://github.com/qxf2/cars-api.git
 
 #Set working directory
 WORKDIR /cars-api
 
-#Install requirements written in the file
+#Install packages listed in requirements.txt file
 RUN pip install -r requirements.txt
 
-#Port flask app use to the conainer
+#Make port 5000 available to the container
 EXPOSE 5000
 
 #Execute command
