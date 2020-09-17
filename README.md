@@ -70,11 +70,13 @@ Hosting cars-api in Docker
 The following steps will guide you how to host cars-api in Docker by building an image and launch the application in the Docker container by running the container. 
 
 1. Building the Docker image :
+
    Run the following command from the terminal 
    
    `docker build --tag cars-api-docker https://github.com/qxf2/cars-api.git#master`
 
 2. Run the Docker container :
+
    Now run the container for the Docker image. Below is the run command to run the Docker image into the container 
    
    `docker run -d -p 5000:5000 cars-api-docker`
