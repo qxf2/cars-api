@@ -152,5 +152,59 @@
 			"name": "Delete",
 			"item": []
 		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{password}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{username}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "username",
+			"value": "qxf2",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "qxf2",
+			"type": "string"
+		},
+		{
+			"key": "base-url",
+			"value": "localhost:5000",
+			"type": "string"
+		}
 	]
 }
