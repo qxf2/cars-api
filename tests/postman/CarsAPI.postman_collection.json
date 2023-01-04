@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "ace2b609-f304-4e16-b927-0358f1a07025",
+		"_postman_id": "faf1387d-2fd6-49b7-9844-76899678d03a",
 		"name": "CarsAPI",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6061248"
+		"_exporter_id": "25162439"
 	},
 	"item": [
 		{
@@ -141,6 +141,70 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Register Car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{username}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"customer_name\": \"Ajitava\",\r\n    \"city\": \"London\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base-url}}/register/car?car_name=City&brand=Honda",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"register",
+								"car"
+							],
+							"query": [
+								{
+									"key": "car_name",
+									"value": "City"
+								},
+								{
+									"key": "brand",
+									"value": "Honda"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -150,7 +214,66 @@
 		},
 		{
 			"name": "Delete",
-			"item": []
+			"item": [
+				{
+					"name": "Delete first entry car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"true\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/register/car/delete",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"register",
+								"car",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {
