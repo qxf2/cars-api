@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "ace2b609-f304-4e16-b927-0358f1a07025",
+		"_postman_id": "43096f9f-88a9-4665-99bf-fedabb8df468",
 		"name": "CarsAPI",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6061248"
+		"_exporter_id": "17699947"
 	},
 	"item": [
 		{
@@ -69,6 +69,41 @@
 							],
 							"path": [
 								"cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"let usersData = pm.response.json();",
+									"",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(usersData.successful).to.eql(true)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/users",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"users"
 							]
 						}
 					},
@@ -151,6 +186,58 @@
 		{
 			"name": "Delete",
 			"item": []
+		},
+		{
+			"name": "https://em49rpx4t7.execute-api.ap-south-1.amazonaws.com/PROD/create_calendar_event?email=raghava.nelabhotla@qxf2.com&title=:PTO&date_of_event=2022-11-02",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{api_key}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "api_key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://em49rpx4t7.execute-api.ap-south-1.amazonaws.com/PROD/create_calendar_event?email=raghava.nelabhotla@qxf2.com&title=:PTO&date_of_event=2022-11-02",
+					"protocol": "https",
+					"host": [
+						"em49rpx4t7",
+						"execute-api",
+						"ap-south-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"PROD",
+						"create_calendar_event"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "raghava.nelabhotla@qxf2.com"
+						},
+						{
+							"key": "title",
+							"value": ":PTO"
+						},
+						{
+							"key": "date_of_event",
+							"value": "2022-11-02"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
