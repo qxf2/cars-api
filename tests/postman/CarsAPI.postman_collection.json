@@ -1,0 +1,354 @@
+{
+	"info": {
+		"_postman_id": "51e9d8f6-e240-4f16-a664-4379ed4ecc90",
+		"name": "CarsAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15473491"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "GET cars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(jsonData.successful).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/cars",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"cars"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "Post add new car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body matches string\", function () {\r",
+									"    pm.expect(jsonData.car.name).to.eql(\"kwid\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"kwid\",\r\n    \"brand\": \"Renault\",\r\n    \"price_range\": \"8-10L\",\r\n    \"car_type\": \"hatchback\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base-url}}/cars/add",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"cars",
+								"add"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUT",
+			"item": []
+		},
+		{
+			"name": "DELETE",
+			"item": [
+				{
+					"name": "Delete car in list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify delete car API response\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.car.name).to.eql(pm.collectionVariables.get(\"test_car_name\"));\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.log(\"About to run pre-request script!\");\r",
+									"\r",
+									"pm.sendRequest({\r",
+									"url: pm.environment.get(\"base-url\")+\"/cars/add\",\r",
+									"/*auth: {\r",
+									"              username: pm.environment.get(\"username\"),\r",
+									"              password: pm.environment.get(\"password\")\r",
+									"            },*/\r",
+									"method: 'POST',\r",
+									"header: {\r",
+									"    \"Content-Type\": \"application/json\",\r",
+									"    \"Authorization\": {\r",
+									"        \"username\": pm.environment.get(\"username\"),\r",
+									"        \"password\": pm.environment.get(\"password\") }\r",
+									"    },\r",
+									"body: { \r",
+									"    mode: 'raw',\r",
+									"    raw:JSON.stringify({\r",
+									"        \"name\": \"Kushaq\",\r",
+									"        \"brand\": \"Skoda\",\r",
+									"        \"price_range\": \"15-20L\",\r",
+									"        \"car_type\": \"SUV\"\r",
+									"        }) \r",
+									"    }, \r",
+									"function (err, response) \r",
+									"    {  console.log(\"Added Skoda Kushaq for testing!\"+response.json()); \r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"test_car_name\", \"Kushaq\");\r",
+									"\r",
+									"console.log(pm.collectionVariables.get(\"test_car_name\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/cars/remove/{{test_car_name}}",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"cars",
+								"remove",
+								"{{test_car_name}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete car not in list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Delete car not in list\", () => {\r",
+									"  pm.expect(pm.response.code).to.eql(404);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/cars/remove/SUV",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"cars",
+								"remove",
+								"SUV"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{password}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{username}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"console.log(\"The request to be made is : \", pm.info.requestName);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "username",
+			"value": "qxf2",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "qxf2",
+			"type": "string"
+		},
+		{
+			"key": "base-url",
+			"value": "localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "test_car_name",
+			"value": ""
+		}
+	]
+}
