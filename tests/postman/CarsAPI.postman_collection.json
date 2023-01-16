@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "ace2b609-f304-4e16-b927-0358f1a07025",
+		"_postman_id": "bc8bc0fe-54de-4409-801f-adcbdc7e0281",
 		"name": "CarsAPI",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6061248"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -69,6 +68,66 @@
 							],
 							"path": [
 								"cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get car by type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    for (let i = 0; i < jsonData.cars.length; i++) {\r",
+									"    pm.expect(jsonData.cars[i]['car_type']).to.eql('hatchback');\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{username}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/cars/filter/hatchback",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"cars",
+								"filter",
+								"hatchback"
 							]
 						}
 					},
