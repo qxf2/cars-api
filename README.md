@@ -54,35 +54,35 @@ PUT:
 
 DELETE:
 1. /cars/remove/< name >      - Delete cars from cars_list
-   Example: response = requests.delete(url='http://127.0.0.1:5000/register/cars/remove/City',auth=(username,password))
-   Example: response = my_session.delete(url='http://127.0.0.1:5000/register/cars/remove/City',auth=(username,password))
+   Example: response = requests.delete(url='http://127.0.0.1:5000/cars/remove/City',auth=(username,password))
+   Example: response = my_session.delete(url='http://127.0.0.1:5000/cars/remove/City',auth=(username,password))
 
 2. /car/delete/     - Delete first entry in car registration list
    Example: response = requests.delete(url='http://127.0.0.1:5000/register/car/delete',auth=(username,password))
    Example: response = my_session.delete(url='http://127.0.0.1:5000/register/car/delete',auth=(username,password))
 
-* Get the username & password from user_list in the cars_app.py file 
+* Get the username & password from user_list in the cars_app.py file
 
 ----
-Hosting cars-api in Docker 
+Hosting cars-api in Docker
 -----
 
-The following steps will guide you how to host cars-api in Docker by building an image and launch the application in the Docker container by running the container. 
+The following steps will guide you how to host cars-api in Docker by building an image and launch the application in the Docker container by running the container.
 
 1. Building the Docker image :
 
-   Run the following command from the terminal 
-   
+   Run the following command from the terminal
+
    `docker build --tag cars-api-docker https://github.com/qxf2/cars-api.git#master`
 
 2. Run the Docker container :
 
-   Now run the container for the Docker image. Below is the run command to run the Docker image into the container 
-   
+   Now run the container for the Docker image. Below is the run command to run the Docker image into the container
+
    `docker run -d -p 5000:5000 cars-api-docker`
 
 3. Launch the app hosted in Docker container:
 
    You could launch the URL to verify and proceed the API Testing:
-   
+
     http://localhost:5000
