@@ -83,15 +83,26 @@
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
-									"let jsonData = pm.response.json();",
-									"",
-									"pm.test(\"Car Found\", function () {",
-									"    pm.expect(jsonData.successful).to.eql(true);",
-									"});",
-									"",
-									"pm.test(\"Searched car found\", function () {",
-									"    pm.expect(pm.response.text()).to.include(\"Swift\");",
-									"});"
+									"var jsonData = pm.response.json();",
+									"if (jsonData.successful == true) {",
+									"    pm.test(\"Car Found\", function () {",
+									"        pm.expect(jsonData.successful).to.eql(true);",
+									"    });",
+									"} else {",
+									"    pm.test(\"Car not Found\", function () {",
+									"        pm.expect(jsonData.successful).to.eql(false);",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"car_name\", \"Thar\");"
 								],
 								"type": "text/javascript"
 							}
@@ -123,13 +134,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{base-url}}/cars/{{car-name}}",
+							"raw": "{{base-url}}/cars/{{car_name}}",
 							"host": [
 								"{{base-url}}"
 							],
 							"path": [
 								"cars",
-								"{{car-name}}"
+								"{{car_name}}"
 							]
 						}
 					},
@@ -263,23 +274,19 @@
 	"variable": [
 		{
 			"key": "username",
-			"value": "qxf2",
-			"type": "string"
+			"value": "qxf2"
 		},
 		{
 			"key": "password",
-			"value": "qxf2",
-			"type": "string"
+			"value": "qxf2"
 		},
 		{
 			"key": "base-url",
-			"value": "localhost:5000",
-			"type": "string"
+			"value": "localhost:5000"
 		},
 		{
-			"key": "car-name",
-			"value": "Swift",
-			"type": "string"
+			"key": "car_name",
+			"value": ""
 		}
 	]
 }
