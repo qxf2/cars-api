@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "ace2b609-f304-4e16-b927-0358f1a07025",
-		"name": "CarsAPI",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6061248"
+		"_postman_id": "ef72f31c-a2bb-4401-b03d-34571ddae414",
+		"name": "CarsAPI Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -69,6 +68,68 @@
 							],
 							"path": [
 								"cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET cars_by_name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Car Found\", function () {",
+									"    pm.expect(jsonData.successful).to.eql(true);",
+									"});",
+									"",
+									"pm.test(\"Searched car found\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Swift\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "qxf2",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base-url}}/cars/{{car-name}}",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"cars",
+								"{{car-name}}"
 							]
 						}
 					},
@@ -151,6 +212,15 @@
 		{
 			"name": "Delete",
 			"item": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
 		}
 	],
 	"auth": {
@@ -204,6 +274,11 @@
 		{
 			"key": "base-url",
 			"value": "localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "car-name",
+			"value": "Swift",
 			"type": "string"
 		}
 	]
