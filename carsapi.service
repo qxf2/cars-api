@@ -1,0 +1,15 @@
+[Unit]
+Description=Gunicorn instance to serve carsapi
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/cars-api
+Environment="PATH=/home/ubuntu/cars-api/venv-carsapi/bin"
+ExecStart=/home/ubuntu/cars-api/venv-carsapi/bin/gunicorn --workers 3 --bind unix:cars_app.sock -m 007 cars_app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
