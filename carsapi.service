@@ -3,12 +3,11 @@ Description=Gunicorn instance to serve carsapi
 After=network.target
 
 [Service]
-User=ubuntu
-Group=www-data
-WorkingDirectory=/home/ubuntu/cars-api
-Environment="PATH=/home/ubuntu/cars-api/venv-carsapi/bin"
-ExecStart=/home/ubuntu/cars-api/venv-carsapi/bin/gunicorn --workers 3 --bind unix:cars_app.sock -m 007 cars_app:app
+WorkingDirectory=/home/ubuntu/code/cars-api
+Environment="PATH=/home/ubuntu/code/venv-carsapi/bin"
+ExecStart=/home/ubuntu/code/venv-carsapi/bin/gunicorn --workers 3 -b 0.0.0.0:5000 cars_app:app
 Restart=always
+RestartSec=1
 
 [Install]
 WantedBy=multi-user.target
