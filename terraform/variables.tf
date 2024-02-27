@@ -9,7 +9,7 @@ variable "aws_region" {
 }
 
 variable "profile" {
-  default = "qxf2-01"
+  default = "personal"
   type    = string
 }
 
