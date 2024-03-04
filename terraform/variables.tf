@@ -13,11 +13,6 @@ variable "profile" {
   type    = string
 }
 
-variable "aws_az" {
-  description = "The Availability Zone to use"
-  type        = string
-}
-
 variable "key_name" {
   description = "The EC2 Key Pair name"
   default = "carsapi-key-pair"
