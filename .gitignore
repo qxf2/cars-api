@@ -11,3 +11,19 @@ __pycache__
 log/
 *.log
 *venv*
+
+# Local .terraform directories
+**/.terraform/*
+*.terraform*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+*.pem
+*.tfvars
+*.tfvars.json
+*.tfstate*
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
