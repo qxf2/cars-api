@@ -1,0 +1,89 @@
+"""
+
+API EXAMPLE TEST
+1. Add new car - POST request(without url_params)
+2. Get all cars - GET request(without url_params)
+3. Verify car count
+4. Update newly added car details -PUT request
+5. Get car details -GET request(with url_params)
+6. Register car - POST request(with url_params)
+7. Get list of registered cars -GET
+8. Verify registered cars count
+9. Delete newly added car -DELETE request
+"""
+
+from endpoints.API_Player import API_Player
+from conf import api_example_conf as conf
+from conf import base_url_conf
+
+def test_api_example(test_api_obj):
+    "Run api test"
+    try:
+        expected_pass = 0
+        actual_pass = -1
+
+        # set authentication details
+        username = conf.user_name
+        password = conf.password
+        auth_details = test_api_obj.set_auth_details(username, password)
+
+        initial_car_count = test_api_obj.get_car_count(auth_details)
+
+
+        # add cars
+        car_details = conf.car_details
+        result_flag = test_api_obj.add_car(car_details=car_details,
+                                            auth_details=auth_details)
+        test_api_obj.log_result(result_flag,
+                                positive='Successfully added new car with details %s' % car_details,
+                                negative='Could not add new car with details %s' % car_details)
+
+
+
+        # Get Cars and verify if new car is added
+        result_flag = test_api_obj.get_cars(auth_details)
+
+        result_flag = test_api_obj.verify_car_count(expected_count=initial_car_count+1,
+                                                auth_details=auth_details)
+        test_api_obj.log_result(result_flag,
+                            positive='Total car count matches expected count',
+                            negative='Total car count doesnt match expected count')
+
+        # Update car
+        update_car = conf.update_car
+        update_car_name = conf.car_name_2
+        result_flag = test_api_obj.update_car(auth_details=auth_details,
+                                            car_name=update_car_name,
+                                            car_details=update_car)
+        test_api_obj.log_result(result_flag,
+                            positive='Successfully updated car : %s' % update_car_name,
+                            negative='Couldnt update car :%s' % update_car_name)
+
+        # Get one car details
+        new_car = conf.car_name_1
+        brand = conf.brand
+        result_flag = test_api_obj.get_car(auth_details=auth_details,
+                                        car_name=new_car,
+                                        brand=brand)
+        test_api_obj.log_result(result_flag,
+                            positive='Successfully fetched car details of car : %s' % new_car,
+                            negative='Couldnt fetch car details of car :%s' % new_car)
+
+        # write out test summary
+        expected_pass = test_api_obj.total
+        actual_pass = test_api_obj.passed
+        test_api_obj.write_test_summary()
+
+    except Exception as e:
+        print(e)
+        if base_url_conf.api_base_url == 'http://127.0.0.1:5000':
+            test_api_obj.write("Please run the test against https://cars-app.qxf2.com/ by changing the api_base_url in base_url_conf.py")
+            test_api_obj.write("OR")
+            test_api_obj.write("Clone the repo 'https://github.com/qxf2/cars-api.git' and run the cars_app inorder to run the test against your system")
+
+        else:
+            test_api_obj.write("Exception when trying to run test:%s" % __file__)
+            test_api_obj.write("Python says:%s" % str(e))
+
+    # Assertion
+    assert expected_pass == actual_pass,"Test failed: %s"%__file__

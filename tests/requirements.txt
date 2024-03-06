@@ -1,0 +1,12 @@
+requests==2.31.0
+reportportal-client==5.0.10
+pytest==6.2.4 ; python_version =='3.6'
+pytest>6.2.4 ; python_version >='3.7'
+python_dotenv==0.16.0
+pytest-xdist>=1.31
+pytest-html>=3.0.0
+pytest-rerunfailures>=9.1.1
+pytest_reportportal==5.0.8
+loguru
+openapi3-parser==1.1.16
+jinja2==3.1.3
