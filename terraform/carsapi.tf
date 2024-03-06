@@ -20,7 +20,16 @@ resource "aws_key_pair" "deployer" {
   }
 }
 
-// App server EC2 instance
+locals {
+  # Create the contents of the carsapi service file using the template
+  carsapi_service_content = templatefile("${path.module}/carsapi.service.tpl", {
+    home_directory = "/home/ubuntu"
+  })
+  
+  # Create the contents of the NGINX configuration file using the template
+  nginx_conf_content = templatefile("${path.module}/nginx.conf.tpl", {})
+}
+
 resource "aws_instance" "carsapp_server" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
@@ -30,9 +39,13 @@ resource "aws_instance" "carsapp_server" {
     #!/bin/bash
     export HOME="/home/ubuntu"
     export DEBIAN_FRONTEND=noninteractive
+    # Variables for file paths
+    SERVICE_FILE="/etc/systemd/system/carsapi.service"
+    NGINX_CONF="/etc/nginx/sites-available/carsapi"
+
     # Create code directory and clone repo
-    su - ubuntu -c "mkdir -p \$HOME/code"
-    su - ubuntu -c "cd \$HOME/code && git clone https://github.com/qxf2/cars-api.git"
+    su - ubuntu -c "mkdir -p $HOME/code"
+    su - ubuntu -c "cd $HOME/code && git clone https://github.com/qxf2/cars-api.git"
     
     # System Update & Package Installation as root
     apt-get update
@@ -44,48 +57,22 @@ resource "aws_instance" "carsapp_server" {
     # Install Certbot Nginx package
     apt-get install -y python3-certbot-nginx
 
-    # Setup virtual environment in the code directory
+    # Setup virtual environment and install dependencies
     su - ubuntu -c "cd \$HOME/code && python3 -m venv venv-carsapi"
     
     # Activate virtual environment and install dependencies
     su - ubuntu -c "source \$HOME/code/venv-carsapi/bin/activate && pip install -r \$HOME/code/cars-api/requirements.txt && pip install gunicorn"
 
-    # Systemd service file setup
-    cat << EOF_SERVICE > /etc/systemd/system/carsapi.service
-    [Unit]
-    Description=Gunicorn instance to serve carsapi
-    After=network.target
-    StartLimitIntervalSec=0
-
-    [Service]
-    WorkingDirectory=/home/ubuntu/code/cars-api
-    Environment="PATH=/home/ubuntu/code/venv-carsapi/bin"
-    ExecStart=/home/ubuntu/code/venv-carsapi/bin/gunicorn --workers 3 -b 0.0.0.0:5000 cars_app:app
-    Restart=always
-    RestartSec=1
-
-    [Install]
-    WantedBy=multi-user.target
-    EOF_SERVICE
+    # Generate systemd service file from template provided by local variable
+    echo "${local.carsapi_service_content}" > $SERVICE_FILE
 
     # Reload daemon and start service
     sudo systemctl daemon-reload
     sudo systemctl start carsapi.service
     sudo systemctl enable carsapi.service
-    # NGINX setup
-    cat << 'EOF_NGINX' > /etc/nginx/sites-available/carsapi
-    server {
-      listen 80 default_server;
-      listen [::]:80 default_server;
-      root /var/www/html;
-      server_name _;
 
-      location / {
-        include proxy_params;
-        proxy_pass http://0.0.0.0:5000;
-      }
-    }
-    EOF_NGINX
+    # Generate NGINX configuration file from template provided by local variable
+    echo "${local.nginx_conf_content}" > $NGINX_CONF
 
     # Link and reload NGINX
     sudo ln -s /etc/nginx/sites-available/carsapi /etc/nginx/sites-enabled
@@ -100,6 +87,7 @@ resource "aws_instance" "carsapp_server" {
     Name = "carsapi"
   }
 }
+
 
 // EBS Volume
 resource "aws_ebs_volume" "carsapp_volume" {

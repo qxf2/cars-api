@@ -25,3 +25,9 @@ variable "private_key_path" {
   type        = string
   description = "Path to the PEM private key file"
 }
+
+variable "home_directory" {
+  default = "/home/ubuntu"
+  type        = string
+  description = "Path to the home directory"
+}
