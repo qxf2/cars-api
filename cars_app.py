@@ -1,3 +1,4 @@
+# pylint: disable=line-too-long
 """
 Cars API is a sample web application developed by Qxf2 Services to help testers learn API automation.
 This REST application written in Python was built solely to help QA learn to write API automation.
@@ -13,11 +14,45 @@ import os
 import random
 from functools import wraps
 import flask
+import json
+from flask_apispec.extension import FlaskApiSpec, make_apispec
+from flask_apispec.annotations import doc
+from flask_apispec import marshal_with
 from flask import Flask, session, request, jsonify, abort, render_template
+import marshmallow as ma
 
+class CarsList(ma.Schema):
+    "Cars List Schema"
+    name = ma.fields.Str()
+    brand = ma.fields.Str()
+    price_range = ma.fields.Str()
+    car_type = ma.fields.Str()
+
+class CustomerDetails(ma.Schema):
+    "Customer Details Schema"
+    customer_name = ma.fields.Str()
+    city = ma.fields.Str()
+
+class RegisteredCar(CarsList, CustomerDetails):
+    "Registered Car Schema"
+    pass
+
+class UserList(ma.Schema):
+    "User List Schema"
+    name = ma.fields.Str()
+    password = ma.fields.Str()
+    perm = ma.fields.Str()
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
+
+app.config.update({
+    'APISPEC_SPEC': make_apispec(title="Cars API",
+                                version="1.0",
+                                openapi_version="3.0.2"),
+})
+
+docs = FlaskApiSpec(app)
 
 """write logs for app
    filehandler of logging  module is not creating log directory if dir does not exist"""
@@ -37,7 +72,6 @@ USER_LIST = [{"name": "qxf2", "password": "qxf2", "perm": "admin"},
              {"name": "jack", "password": "qxf2", "perm": "non_admin"}]
 
 registered_cars = []
-
 
 def check_auth(username, password):
     "check if the given is valid"
@@ -97,10 +131,15 @@ def index_page():
     return render_template('index.html')
 
 
+# The doc decorator needs to be used only to generate an OpenAPI spec
+# Uncomment the next line only to create the spec, it modified the view function return type when left uncommented when using the app
+@marshal_with(CarsList)
 @app.route("/cars", methods=["GET"])
 @requires_auth
 def get_cars():
-    """this will help test GET without url params"""
+    """
+    this will help test GET without url params
+   """
     return flask.jsonify({"cars_list": session.get('cars_list'), 'successful': True})
 
 
@@ -117,6 +156,9 @@ def get_car_details(name):
 
 
 @app.route("/cars/find", methods=["GET"])
+# The doc decorator needs to be used only to generate an OpenAPI spec
+# Uncomment the next line only to create the spec, it modified the view function return type when left uncommented when using the app
+@doc(params={'car_name':{'name':'car_name', 'in':'query', 'type': 'string'}, 'brand':{'name':'brand', 'in': 'query', 'type': 'string'}})
 @requires_auth
 def get_car():
     """this will help test GET with url params"""
@@ -138,6 +180,10 @@ def get_car():
 
 @app.route("/cars/add", methods=["POST"])
 @requires_auth
+# The marshal_with decorator can be used to generate requestBody for the endpoint
+# But adding it modifes the return value of this view function
+# Uncomment the next line to generate an OpenAPI spec alone
+@marshal_with(CarsList)
 def add_car():
     """this will help test POST without url params"""
     if not request.json or not 'name' in request.json:
@@ -148,13 +194,19 @@ def add_car():
         'price_range': request.json['price_range'],
         'car_type': request.json['car_type']
     }
+    print(f"Adding car {car} to {session.get('cars_list')}")
     session.get('cars_list').append(car)
+    print(f"The new cars list is {session.get('cars_list')}")
     resp = jsonify({'car': car, 'successful': True}), 200
 
     return resp
 
 
 @app.route("/cars/update/<name>", methods=["PUT"])
+# The marshal_with decorator can be used to generate requestBody for the endpoint
+# But adding it modifes the return value of this view function
+# Uncomment the next line to generate an OpenAPI spec alone
+@marshal_with(CarsList)
 @requires_auth
 def update_car(name):
     """this will help test PUT """
@@ -193,6 +245,13 @@ def remove_car(name):
 
 @app.route('/register/car', methods=['POST'])
 @requires_auth
+# The doc decorator needs to be used only to generate an OpenAPI spec
+# Uncomment the next line only to create the spec, it modified the view function return type when left uncommented when using the app
+@doc(params={'car_name':{'name':'car_name', 'in':'query', 'type': 'string'}, 'brand':{'name':'brand', 'in': 'query', 'type': 'string'}})
+# The marshal_with decorator can be used to generate requestBody for the endpoint
+# But adding it modifes the return value of this view function
+# Uncomment the next line to generate an OpenAPI spec alone
+@marshal_with(CustomerDetails)
 def register_car():
     """this will help test GET and POST with dynamic numbers in url"""
     car_name = request.args.get('car_name')
@@ -243,6 +302,8 @@ def get_user_list():
         return jsonify({'user_list': USER_LIST, 'successful': True}), 200
     return jsonify({'message': 'You are not permitted to access this resource', 'successful': False}), 403
 
+docs.register_existing_resources()
+print(json.dumps(docs.spec.to_dict(), indent=4))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

@@ -1,0 +1,330 @@
+{
+    "paths": {
+        "/": {
+            "options": {
+                "responses": {
+                    "200":{
+                        "description":"",
+                        "schema": {}
+                    }
+                },
+                "parameters": []
+            },
+            "get": {
+                "responses": {
+                    "responses": {
+                        "200":{
+                            "description":"",
+                            "schema": {}
+                        }
+                    },
+                    "parameters": []
+                },
+                "parameters": []
+            }
+        },
+        "/cars": {
+            "options": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/components/schemas/CarsList"
+                        }
+                    }
+                },
+                "parameters": []
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/components/schemas/CarsList"
+                        }
+                    }
+                },
+                "parameters": []
+            }
+        },
+        "/cars/{name}": {
+            "options": {
+                "responses": {},
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            },
+            "get": {
+                "responses": {},
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/cars/find": {
+            "options": {
+                "responses": {},
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "brand",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "car_name",
+                        "in": "query"
+                    }
+                ]
+            },
+            "get": {
+                "responses": {},
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "brand",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "car_name",
+                        "in": "query"
+                    }
+                ]
+            }
+        },
+        "/cars/add": {
+            "options": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/components/schemas/CarsList"
+                        }
+                    }
+                },
+                "parameters": []
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/components/schemas/CarsList"
+                        }
+                    }
+                },
+                "parameters": []
+            }
+        },
+        "/cars/update/{name}": {
+            "options": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/components/schemas/CarsList"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            },
+            "put": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/components/schemas/CarsList"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/cars/remove/{name}": {
+            "options": {
+                "responses": {},
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            },
+            "delete": {
+                "responses": {},
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/register/car": {
+            "options": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/components/schemas/CustomerDetails"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "brand",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "car_name",
+                        "in": "query"
+                    }
+                ]
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/components/schemas/CustomerDetails"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "brand",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "car_name",
+                        "in": "query"
+                    }
+                ]
+            }
+        },
+        "/register/": {
+            "options": {
+                "responses": {},
+                "parameters": []
+            },
+            "get": {
+                "responses": {},
+                "parameters": []
+            }
+        },
+        "/register/car/delete/": {
+            "options": {
+                "responses": {},
+                "parameters": []
+            },
+            "delete": {
+                "responses": {},
+                "parameters": []
+            }
+        },
+        "/cars/filter/{car_type}": {
+            "options": {
+                "responses": {},
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "car_type",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            },
+            "get": {
+                "responses": {},
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "car_type",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/users": {
+            "options": {
+                "responses": {},
+                "parameters": []
+            },
+            "get": {
+                "responses": {},
+                "parameters": []
+            }
+        }
+    },
+    "info": {
+        "title": "Cars API",
+        "version": "1.0"
+    },
+    "openapi": "3.0.2",
+    "components": {
+        "schemas": {
+            "CarsList": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "brand": {
+                        "type": "string"
+                    },
+                    "price_range": {
+                        "type": "string"
+                    },
+                    "car_type": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CustomerDetails": {
+                "type": "object",
+                "properties": {
+                    "customer_name": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
