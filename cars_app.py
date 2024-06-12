@@ -14,10 +14,15 @@ import random
 from functools import wraps
 import flask
 from flask import Flask, session, request, jsonify, abort, render_template
+from apitally.flask import ApitallyMiddleware
 
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
+
+app.wsgi_app = ApitallyMiddleware(app,
+                                  client_id="c945b906-bf5f-4820-9757-1aaf2bae3434",
+                                  env="dev")
 
 """write logs for app
    filehandler of logging  module is not creating log directory if dir does not exist"""
