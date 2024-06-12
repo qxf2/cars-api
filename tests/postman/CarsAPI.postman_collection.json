@@ -1,0 +1,354 @@
+{
+	"info": {
+		"_postman_id": "402e1af1-12f2-435b-9101-2186760792c2",
+		"name": "CarsAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9508264"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "GET cars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(jsonData.successful).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base-url}}/cars",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"cars"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "Post add new car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body matches string\", function () {\r",
+									"    pm.expect(jsonData.car.name).to.eql(\"kwid\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"kwid\",\r\n    \"brand\": \"Renault\",\r\n    \"price_range\": \"8-10L\",\r\n    \"car_type\": \"hatchback\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base-url}}/cars/add",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"cars",
+								"add"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUT",
+			"item": [
+				{
+					"name": "Update a car  - Positive test case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Updated price_range of car is returned\", function () {\r",
+									"    pm.expect(jsonData.response.car.price_range).to.eql(\"2 lacs\");\r",
+									"    pm.expect(jsonData.response.car.car_type).to.eql(\"Sedan\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"Maruti\",\r\n    \"car_type\": \"Sedan\",\r\n    \"name\": \"Swift\",\r\n    \"price_range\": \"2 lacs\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/cars/update/{{car_name}}",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"cars",
+								"update",
+								"{{car_name}}"
+							],
+							"query": [
+								{
+									"key": "<%name%>",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a car  - Negative test case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(jsonData.response.successful).to.eql(false);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"Volkswagen\",\r\n    \"car_type\": \"sedan\",\r\n    \"name\": \"vent\",\r\n    \"price_range\": \"11 lacs\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/cars/update/{{incorect_car_name}}",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"cars",
+								"update",
+								"{{incorect_car_name}}"
+							],
+							"query": [
+								{
+									"key": "<%name%>",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete",
+			"item": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{password}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{username}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "username",
+			"value": "qxf2",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "qxf2",
+			"type": "string"
+		},
+		{
+			"key": "base-url",
+			"value": "localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "car_name",
+			"value": "Swift"
+		},
+		{
+			"key": "incorect_car_name",
+			"value": "Vento"
+		}
+	]
+}
